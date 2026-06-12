@@ -1,0 +1,162 @@
+/* « Comment ça marche » strip (content-ux.md §3.5) — outline Octane digits
+   whose wdth stretches 0→100 on reveal (0.15s stagger via transition-delay),
+   3 columns desktop / 1 column mobile, white pill CTA. */
+
+.strip {
+  border-top: 1px solid var(--border);
+  padding: 9em 0 13em;
+}
+
+.inner {
+  max-width: 88em;
+  margin: 0 auto;
+  padding: 0 1.9em;
+}
+
+.eyebrow {
+  opacity: 0.5;
+  margin: 0 0 4.5em;
+}
+
+.grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 3em;
+  grid-row-gap: 4em;
+  font-size: 1em;
+  line-height: inherit;
+}
+
+.step {
+  padding: 0;
+  border-top: 1px solid var(--border);
+  padding-top: 2.2em;
+}
+
+/* giant outline / low-wght Octane digit */
+.digit {
+  display: block;
+  font-family: var(--font-octane);
+  font-size: clamp(4.2rem, 8vw, 9rem);
+  font-weight: 100;
+  line-height: 1;
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.45);
+  font-variation-settings: "wght" 10, "wdth" 0;
+  transition: font-variation-settings 1.6s var(--ease-out-quart);
+}
+
+.step:nth-child(2) .digit {
+  transition-delay: 0.15s;
+}
+.step:nth-child(3) .digit {
+  transition-delay: 0.3s;
+}
+
+/* reveal class added by ScrollTrigger */
+.in .digit {
+  font-variation-settings: "wght" 10, "wdth" 100;
+}
+
+.stepTitle {
+  margin: 1.3em 0 0.7em;
+  color: var(--heading);
+  font-family: var(--font-oak);
+  font-size: 1.2em;
+  line-height: 1.4em;
+}
+
+.stepText {
+  margin: 0;
+  max-width: 24em;
+  color: var(--paragraphs);
+  font-size: 1em;
+  line-height: 1.7em;
+}
+
+.ctaWrap {
+  margin-top: 8em;
+  display: flex;
+  justify-content: center;
+}
+
+/* white pill (design-system.md §8 .button-light) */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9em;
+  background-color: var(--heading);
+  color: var(--background);
+  border-radius: 50em;
+  padding: 1.6em 2.8em;
+  text-decoration: none;
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  transition:
+    background-color 0.3s var(--ease-out-quad),
+    color 0.3s var(--ease-out-quad);
+}
+
+.cta:hover {
+  background-color: var(--button-bg-hover);
+  color: var(--heading);
+}
+
+.ctaArrow {
+  display: inline-block;
+  transition: transform 0.3s var(--ease-out-quad);
+}
+
+.cta:hover .ctaArrow {
+  transform: translateX(0.35em);
+}
+
+/* ---------- responsive ---------- */
+
+@media screen and (max-width: 991px) {
+  .strip {
+    padding: 7em 0 10em;
+  }
+  .grid {
+    grid-column-gap: 2em;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .strip {
+    padding: 5.5em 0 7em;
+  }
+  .inner {
+    padding: 0 1.4em;
+  }
+  .eyebrow {
+    margin-bottom: 3em;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .digit {
+    font-size: clamp(4.2rem, 17vw, 7rem);
+  }
+  .ctaWrap {
+    margin-top: 5.5em;
+  }
+}
+
+/* Reduced motion: digits sit at final width, no transitions. */
+@media (prefers-reduced-motion: reduce) {
+  .digit {
+    transition: none;
+    font-variation-settings: "wght" 10, "wdth" 100;
+  }
+  .ctaArrow {
+    transition: none;
+  }
+}

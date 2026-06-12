@@ -1,0 +1,317 @@
+/* ============================================================
+   /contact — content-ux.md §4
+   Minimal, dramatic: giant Octane "PARLONS-EN", two giant links
+   with the nav underline sweep, ghost mini-form.
+   ============================================================ */
+
+.section {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 9em 1.4em 6em;
+  overflow: clip; /* rotY(70°) letters poke out during the entrance flip */
+}
+
+/* GSAP entrance initial states (animations.md §5 pattern — FOUC-proof in CSS,
+   mirrored by gsap autoAlpha / transform tweens) */
+.fade {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* ---------- Eyebrow + hours (micro-label, --paragraphs) ---------- */
+
+.eyebrow,
+.hours {
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--paragraphs);
+  margin: 0;
+}
+
+.hours {
+  margin-top: 1.6em;
+}
+
+/* ---------- Giant Octane title ---------- */
+
+.title {
+  display: flex;
+  justify-content: center;
+  perspective: 1000px;
+  font-family: var(--font-octane);
+  font-size: 14vw;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--heading);
+  margin: 0.08em 0 0.28em;
+}
+
+.letter {
+  display: inline-block;
+  transform-style: preserve-3d;
+  /* entrance initial state (hero quirk pattern, animations.md §1) */
+  opacity: 0;
+  transform: translate3d(3vw, 0, 0) rotateX(7deg) rotateY(70deg);
+  /* signature variable-font stretch (animations.md §2b — pure CSS) */
+  font-variation-settings: "wght" 10, "wdth" 0;
+  transition: font-variation-settings 3s var(--ease-out-quart);
+}
+
+.letter:hover {
+  font-variation-settings: "wght" 10, "wdth" 100;
+}
+
+/* ---------- Giant contact links (underline sweep, same as nav-link) ---------- */
+
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3em;
+}
+
+.bigLink {
+  display: inline-block;
+  position: relative;
+  text-decoration: none;
+  color: var(--heading);
+  padding: 0.1em 0.15em;
+}
+
+.bigLinkText {
+  display: block;
+  font-size: clamp(1.4rem, 3.5vw, 2.8rem);
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.bigLinkTrack {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 2px;
+  overflow: hidden;
+}
+
+.bigLinkLine {
+  display: block;
+  position: absolute;
+  inset: 0%;
+  width: 100%;
+  background-color: var(--heading);
+  transform: translateX(-105%); /* resting state, mirrored by GSAP xPercent */
+}
+
+/* ---------- Mini-form (ghost inputs, content-ux.md §1 step 8 style) ---------- */
+
+.formWrap {
+  width: min(100%, 30em);
+  margin-top: 4em;
+  text-align: left;
+}
+
+/* crossfade stack: form + success share the same grid cell */
+.swap {
+  display: grid;
+}
+
+.swap > * {
+  grid-area: 1 / 1;
+}
+
+.fieldset {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+}
+
+.group {
+  margin-bottom: 1.7em;
+}
+
+.field {
+  position: relative;
+  padding-top: 1.5em;
+  border-bottom: 1px solid var(--border);
+}
+
+.input,
+.textarea {
+  display: block;
+  width: 100%;
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+  padding: 0.3em 0 0.5em;
+  color: var(--heading);
+  font-family: var(--font-oak);
+  font-size: 1.25em;
+  font-weight: 400;
+  line-height: 1.5em;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none; /* focus shown by .focusLine wipe */
+}
+
+.textarea {
+  resize: none;
+  overflow: hidden; /* auto-grow via JS */
+}
+
+/* floating label — micro-label resting on the input line, lifts on focus/filled */
+.fieldLabel {
+  position: absolute;
+  top: 0.4em;
+  left: 0;
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--paragraphs);
+  pointer-events: none;
+  transform: translateY(2.1em);
+  transition: transform 0.4s var(--ease-out-quad), color 0.4s var(--ease-out-quad);
+}
+
+.input:focus + .fieldLabel,
+.input:not(:placeholder-shown) + .fieldLabel,
+.textarea:focus + .fieldLabel,
+.textarea:not(:placeholder-shown) + .fieldLabel {
+  transform: translateY(0);
+}
+
+/* white border-bottom wipes in left→right on focus (0.4s) */
+.focusLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background-color: var(--heading);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s var(--ease-out-quad);
+}
+
+.field:focus-within .focusLine {
+  transform: scaleX(1);
+}
+
+.error {
+  color: #ff8f88;
+  font-size: 0.8em;
+  line-height: 1.5em;
+  margin: 0.6em 0 0;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 2.4em;
+}
+
+/* pill pleine blanche (design-system.md §5 .button.small geometry) */
+.submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  border: 0;
+  border-radius: 50em;
+  padding: 1.4em 2.4em;
+  background-color: var(--heading);
+  color: #000;
+  cursor: pointer;
+  font-family: var(--font-oak);
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  transition: background-color 0.3s var(--ease-out-quad);
+}
+
+.submit:hover {
+  background-color: var(--azure);
+}
+
+.submit:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.submit:disabled:hover {
+  background-color: var(--heading);
+}
+
+/* ---------- Success state (crossfaded in by GSAP) ---------- */
+
+.success {
+  opacity: 0;
+  visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2em 0;
+}
+
+.successTitle {
+  color: var(--heading);
+  font-size: 1.3em;
+  font-weight: 600;
+  line-height: 1.4em;
+  margin: 0 0 0.4em;
+}
+
+.successText {
+  color: var(--paragraphs);
+  font-size: 1em;
+  line-height: 1.7em;
+  margin: 0;
+}
+
+/* ---------- Responsive ---------- */
+
+@media screen and (max-width: 767px) {
+  .section {
+    padding: 8em 1.4em 5em;
+  }
+
+  .formWrap {
+    margin-top: 3em;
+  }
+}
+
+@media screen and (max-width: 479px) {
+  .title {
+    font-size: 18vw;
+  }
+
+  .bigLinkText {
+    line-height: 1.5;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .letter,
+  .fieldLabel,
+  .focusLine,
+  .submit {
+    transition: none;
+  }
+}

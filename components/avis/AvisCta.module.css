@@ -1,0 +1,52 @@
+/* /avis end-of-page CTA — content-ux.md §2.4 */
+
+.cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10em 1.4em 11em;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-octane);
+  font-size: clamp(3rem, 8vw, 9rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+  color: var(--heading);
+  font-weight: 10;
+  /* --wdth is tweened 0→100 by GSAP on scroll reveal; defaults to the
+     final state so reduced-motion / no-JS render the full title. */
+  font-variation-settings: "wght" 10, "wdth" var(--wdth, 100);
+}
+
+.button {
+  display: inline-block;
+  margin-top: 2.8em;
+  padding: 1.2em 2.4em;
+  background-color: var(--heading);
+  color: black;
+  text-decoration: none;
+  border-radius: 50em;
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.2em;
+  transition: background-color 0.3s var(--ease-out-quad);
+}
+
+.button:hover {
+  background-color: var(--azure);
+}
+
+@media screen and (max-width: 767px) {
+  .cta {
+    padding: 7em 1.4em 8em;
+  }
+
+  .title {
+    font-size: clamp(2.4rem, 11vw, 4rem);
+  }
+}

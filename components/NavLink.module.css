@@ -1,0 +1,38 @@
+/* .nav-link / .nav-text / .block-underline / .underline (webflow.css) */
+
+.navLink {
+  display: inline-block;
+  padding: 0.5em 1.2em;
+  text-decoration: none;
+  position: relative;
+}
+
+.navText {
+  z-index: 10;
+  position: relative;
+  display: block;
+  color: var(--heading);
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin: 0.5em 0;
+}
+
+.blockUnderline {
+  display: block;
+  width: 100%;
+  height: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.underline {
+  display: block;
+  position: absolute;
+  inset: 0%;
+  width: 100%;
+  background-color: var(--heading);
+  transform: translateX(-105%); /* FOUC-proof resting state, mirrored by GSAP xPercent */
+}

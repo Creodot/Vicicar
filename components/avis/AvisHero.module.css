@@ -1,0 +1,166 @@
+/* /avis hero — content-ux.md §2.1, typography mirrors the home hero
+   (design-system.md §4, animations.md §1/§2b) */
+
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: 9em clamp(1.4em, 4vw, 4em) 0;
+  position: relative;
+}
+
+.head {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 1.2em;
+  min-height: 0;
+}
+
+/* Hidden pre-intro states (FOUC-proof, mirrors the home navbar/tagline
+   pattern — animations.md §5). GSAP animates them to identity. */
+.eyebrow,
+.sub,
+.stats {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.2em;
+  color: var(--paragraphs);
+}
+
+/* ---- The word AVIS — same letter treatment as the home hero ---- */
+
+.word {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  max-width: 100%;
+}
+
+.blockLetter {
+  display: inline-block;
+  perspective: 1000px; /* parent of the 3D letter intro */
+}
+
+.letter {
+  display: inline-block;
+  font-family: var(--font-octane);
+  font-size: 20vw; /* single line, hero scale */
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--heading);
+  font-weight: 10;
+  font-variation-settings: "wght" 10, "wdth" 0;
+  /* signature stretch — pure CSS, 3s outQuart (animations.md §2b) */
+  transition: font-variation-settings 3s var(--ease-out-quart);
+  /* descender room doubles as the hover hitbox, like home */
+  padding: 1vw 0.1em 3.5vw;
+  /* intro initial state (GSAP tweens to identity) */
+  opacity: 0;
+  transform: translate3d(3vw, 0, 0) rotateX(7deg) rotateY(70deg);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.letter:hover {
+  font-variation-settings: "wght" 10, "wdth" 100;
+}
+
+/* ---- Subtitle (.text-info style) ---- */
+
+.sub {
+  margin: 0;
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.7em;
+  color: var(--heading);
+}
+
+/* ---- Stat strip ---- */
+
+.stats {
+  list-style: none;
+  margin: 2.5em 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.9em;
+  text-align: center;
+  padding: 2.4em 1em 2.8em;
+}
+
+.stat + .stat {
+  border-left: 1px solid var(--border);
+}
+
+.statNumber {
+  font-family: var(--font-octane);
+  font-size: clamp(2.4rem, 4.5vw, 4rem);
+  line-height: 1;
+  color: var(--heading);
+  font-weight: 50;
+  font-variation-settings: "wght" 50, "wdth" 60;
+  text-transform: uppercase;
+}
+
+.statLabel {
+  font-size: 0.8em;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  line-height: 1.2em;
+  color: var(--paragraphs);
+}
+
+/* ---- Responsive (Webflow breakpoints) ---- */
+
+@media screen and (max-width: 991px) {
+  .letter {
+    font-size: 23vw;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .hero {
+    padding-top: 8em;
+  }
+
+  .letter {
+    font-size: 26vw;
+    padding-bottom: 5vw;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat {
+    padding: 1.6em 1em;
+  }
+
+  .stat + .stat {
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+}

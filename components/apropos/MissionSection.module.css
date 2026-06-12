@@ -1,0 +1,113 @@
+/* Mission sections — editorial alternating blocks (content-ux.md §3.2–3.4).
+   Hairline-separated full-width rows, huge condensed Octane headings,
+   body copy in --paragraphs offset to the opposite half. */
+
+.section {
+  border-top: 1px solid var(--border);
+  padding: 9em 0;
+}
+
+.inner {
+  max-width: 88em;
+  margin: 0 auto;
+  padding: 0 1.9em;
+}
+
+.eyebrow {
+  opacity: 0.5;
+  margin: 0 0 2.4em;
+}
+
+.title {
+  margin: 0;
+  max-width: 14em;
+  color: var(--heading);
+  font-family: var(--font-octane);
+  font-size: clamp(2.4rem, 5vw, 5.6rem);
+  font-weight: 100;
+  line-height: 0.95;
+  text-transform: uppercase;
+  font-variation-settings: "wght" 10, "wdth" 0;
+  transition: font-variation-settings 1.2s var(--ease-out-quart);
+}
+
+/* reveal class added by ScrollTrigger → signature wdth stretch 0→25 */
+.in .title {
+  font-variation-settings: "wght" 10, "wdth" 25;
+}
+
+.body {
+  margin-top: 3.6em;
+  margin-left: 46%;
+  max-width: 36em;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4em;
+}
+
+.paragraph {
+  color: var(--paragraphs);
+  font-size: 1.1em;
+  line-height: 1.7em;
+  margin: 0;
+}
+
+/* ---- alternating variant: title pushed right, body back left ---- */
+
+.flip .eyebrow,
+.flip .title {
+  margin-left: auto;
+  text-align: right;
+}
+
+.flip .eyebrow {
+  width: fit-content;
+}
+
+.flip .body {
+  margin-left: 0;
+  margin-right: 46%;
+}
+
+/* ---------- responsive ---------- */
+
+@media screen and (max-width: 991px) {
+  .section {
+    padding: 7em 0;
+  }
+  .body {
+    margin-left: 30%;
+  }
+  .flip .body {
+    margin-right: 30%;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .section {
+    padding: 5.5em 0;
+  }
+  .inner {
+    padding: 0 1.4em;
+  }
+  .body {
+    margin-left: 0;
+    margin-top: 2.6em;
+  }
+  .flip .body {
+    margin-right: 0;
+  }
+  .flip .eyebrow,
+  .flip .title {
+    margin-left: 0;
+    text-align: left;
+  }
+}
+
+/* Reduced motion: no width transition, title sits at its final width. */
+@media (prefers-reduced-motion: reduce) {
+  .title {
+    transition: none;
+    font-variation-settings: "wght" 10, "wdth" 25;
+  }
+}

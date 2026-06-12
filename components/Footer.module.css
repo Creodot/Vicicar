@@ -1,0 +1,68 @@
+/* Footer partagé (content-ux.md §5) */
+
+.footer {
+  margin-top: auto; /* sticks to bottom of the flex-column body */
+  border-top: 1px solid var(--border);
+  padding: 4em 1.4em 1.4em;
+  display: flex;
+  flex-direction: column;
+  grid-row-gap: 1.5em;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  height: 1.62em;
+}
+
+.links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.rowMeta {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.meta {
+  color: var(--paragraphs);
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+@media screen and (max-width: 767px) {
+  .footer {
+    grid-row-gap: 2em;
+  }
+
+  .row,
+  .rowMeta {
+    flex-direction: column;
+    grid-row-gap: 2em;
+    text-align: center;
+  }
+
+  .links {
+    flex-direction: column;
+    grid-row-gap: 0.7em;
+  }
+}

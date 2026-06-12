@@ -1,0 +1,136 @@
+/* ============================================================
+   Hero — 1:1 replica of webflow.css .section-hero block
+   Source: _reference/spec/design-system.md §4, animations.md §1–2
+   Values verbatim from webflow.css — do not "modernize" units.
+   ============================================================ */
+
+.sectionHero {
+  z-index: 100;
+  background-color: var(--background);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  min-height: 100svh;
+  position: relative;
+  overflow: hidden;
+}
+
+.wrapperLetter {
+  z-index: 50;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.blockLetter {
+  z-index: 50;
+  flex: 1; /* 7 equal columns; neighbours reflow during the wdth stretch */
+  perspective: 1000px; /* parent of the 3D letter intro */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: stretch;
+  text-align: center;
+  position: relative;
+}
+
+.letter {
+  z-index: 10;
+  position: relative;
+  display: inline-block;
+  color: var(--heading);
+  font-family: var(--font-octane);
+  font-size: 34vw; /* same at ALL breakpoints — no overrides */
+  font-weight: 100;
+  line-height: 100%;
+  text-transform: uppercase;
+  cursor: default;
+  font-variation-settings: "wght" 10, "wdth" 0;
+  padding-top: 2vw;
+  padding-bottom: 7.5vw; /* descender room; also = video hover hitbox */
+  transition: font-variation-settings 3s var(--ease-out-quart);
+  /* FOUC-proof initial state (mirrors source inline styles);
+     GSAP animates to identity on load */
+  opacity: 0;
+  transform: translate3d(3vw, 0, 0) rotateX(7deg) rotateY(70deg);
+  transform-style: preserve-3d;
+}
+
+/* variable-font width stretch is pure CSS (animations.md §2b);
+   gated so touch devices don't stick mid-stretch */
+@media (hover: hover) {
+  .letter:hover {
+    font-variation-settings: "wght" 10, "wdth" 100;
+  }
+}
+
+.bgVideoLetter {
+  z-index: 5; /* behind the sibling .letter (z 10) */
+  height: 100%;
+  position: absolute;
+  inset: 0%;
+  /* autoAlpha-compatible stand-in for source's opacity:0 + display:none */
+  opacity: 0;
+  visibility: hidden;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  /* poster rendered as background-image, exactly like Webflow's bg-video atom */
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.blockInfo {
+  z-index: 100;
+  position: absolute;
+  inset: auto 10% 1.8em; /* bottom strip */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0; /* fades in at 0.7s via GSAP (animations.md §1b) */
+}
+
+.textInfo {
+  color: var(--heading);
+  max-width: 32em;
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.7em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* ---------- ≤767px — the ONLY hero responsive change in source ---------- */
+
+@media screen and (max-width: 767px) {
+  .blockInfo {
+    bottom: 1em;
+  }
+  .textInfo {
+    line-height: 1.6em;
+  }
+}
+
+/* ---------- prefers-reduced-motion: appear without 3D flip ----------
+   (no-JS-safe; the GSAP matchMedia branch mirrors this) */
+
+@media (prefers-reduced-motion: reduce) {
+  .letter {
+    opacity: 1;
+    transform: none;
+    transition-duration: 0.01s; /* hover stretch snaps instead of 3s sweep */
+  }
+  .blockInfo {
+    opacity: 1;
+  }
+}

@@ -1,0 +1,693 @@
+/* ============================================================
+   /trouver-ma-voiture — multi-step form (content-ux.md §1)
+   Tokens from globals.css; easings: --ease-out-quad (UI),
+   --ease-out-quart (Octane wdth stretches).
+   ============================================================ */
+
+.main {
+  display: block;
+}
+
+/* ---------- progress (§1.2): 2px fixed top, under the navbar (z 500) ---------- */
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--border);
+  z-index: 400;
+}
+
+.progressFill {
+  width: 0%;
+  height: 100%;
+  background: var(--heading);
+}
+
+/* ---------- layout ---------- */
+
+.viewport {
+  min-height: 100svh;
+  display: flex;
+  justify-content: center;
+  padding: 8em 1.4em 4em;
+}
+
+.screen {
+  width: 100%;
+  max-width: 72em;
+  /* overflow-safe vertical centering (never clips tall screens) */
+  margin-block: auto;
+  will-change: transform, opacity;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- screen anatomy (§1.1) ---------- */
+
+.eyebrow {
+  color: var(--paragraphs);
+  margin: 0 0 1.8em;
+}
+
+.title {
+  font-family: var(--font-octane);
+  font-size: clamp(2.5rem, 8vw, 7rem);
+  font-weight: 400;
+  line-height: 0.95;
+  text-transform: uppercase;
+  color: var(--heading);
+  font-variation-settings: "wght" 10, "wdth" 25;
+  margin: 0 0 0.35em;
+  outline: none;
+  animation: titleIn 0.9s var(--ease-out-quart) both;
+}
+
+@keyframes titleIn {
+  from {
+    font-variation-settings: "wght" 10, "wdth" 0;
+  }
+  to {
+    font-variation-settings: "wght" 10, "wdth" 25;
+  }
+}
+
+.helper {
+  color: var(--paragraphs);
+  font-size: 1em;
+  line-height: 1.7em;
+  max-width: 32em;
+  margin: 0;
+}
+
+/* ---------- options grid (§1.3) ---------- */
+
+.options {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.8em;
+  margin-top: 2.6em;
+}
+
+.cols3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+/* ---------- option card ---------- */
+
+.option,
+.pill {
+  position: relative;
+  display: flex;
+  min-height: 48px;
+  color: var(--heading);
+  background: transparent;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color 0.3s var(--ease-out-quad),
+    background-color 0.3s var(--ease-out-quad),
+    transform 0.3s var(--ease-out-quad);
+}
+
+.option {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.45em;
+  text-align: left;
+  border-radius: 1em;
+  padding: 1.2em 4em 1.2em 1.6em;
+}
+
+/* budget pills (étape 3) */
+.pill {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 50em;
+  padding: 1.1em 3em;
+}
+
+.option:hover,
+.pill:hover {
+  border-color: var(--paragraphs);
+  transform: translateY(-0.2em);
+}
+
+/* keyboard focus mirrors the selected border so the indicator stays on-brand */
+.option:focus-visible,
+.pill:focus-visible,
+.creneauPill:focus-visible {
+  border-color: var(--heading);
+}
+
+/* selected: white border + glass fill, label stretches wdth 0→100 (§1.2) */
+.option.optionSelected,
+.pill.optionSelected {
+  border-color: var(--heading);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  transform: translateY(0);
+}
+
+.optionLabel {
+  font-family: var(--font-octane);
+  font-size: clamp(1.4rem, 3.2vw, 2.6rem);
+  line-height: 1.05;
+  text-transform: uppercase;
+  font-variation-settings: "wght" 10, "wdth" 0;
+  transition: font-variation-settings 0.8s var(--ease-out-quart);
+}
+
+.option:hover .optionLabel,
+.pill:hover .optionLabel {
+  font-variation-settings: "wght" 10, "wdth" 40;
+}
+
+.option.optionSelected .optionLabel,
+.pill.optionSelected .optionLabel {
+  font-variation-settings: "wght" 10, "wdth" 100;
+}
+
+.optionSub {
+  color: var(--paragraphs);
+  font-size: 0.9em;
+  line-height: 1.5em;
+}
+
+/* keyboard shortcut chip (1–6) */
+.optionKey {
+  position: absolute;
+  top: 1.1em;
+  right: 1.2em;
+  font-size: 0.7em;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  line-height: 1.5;
+  color: var(--paragraphs);
+  border: 1px solid var(--border);
+  border-radius: 0.45em;
+  padding: 0.05em 0.55em;
+  transition: color 0.3s var(--ease-out-quad), border-color 0.3s var(--ease-out-quad);
+}
+
+.pill .optionKey {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.option:hover .optionKey,
+.pill:hover .optionKey,
+.optionSelected .optionKey {
+  color: var(--heading);
+  border-color: var(--paragraphs);
+}
+
+/* touch devices: no keyboard → hide the hint */
+@media (hover: none) {
+  .optionKey {
+    display: none;
+  }
+  .option {
+    padding-right: 1.6em;
+  }
+  .pill {
+    padding-inline: 1.6em;
+  }
+}
+
+/* ---------- actions bar (back / counter / continue) ---------- */
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5em;
+  margin-top: 3.2em;
+}
+
+.actionsRight {
+  display: flex;
+  align-items: center;
+  gap: 1.8em;
+}
+
+.backBtn {
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0.5em 0;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.backHidden {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.backText {
+  display: block;
+}
+
+/* nav-link style underline sweep (CSS variant of animations.md §3) */
+.backLineWrap {
+  display: block;
+  height: 1px;
+  margin-top: 0.45em;
+  overflow: hidden;
+}
+
+.backLine {
+  display: block;
+  height: 1px;
+  background: var(--heading);
+  transform: translateX(-105%);
+  transition: transform 0.3s var(--ease-out-quad);
+}
+
+.backBtn:hover .backLine,
+.backBtn:focus-visible .backLine {
+  transform: translateX(0);
+}
+
+.counter {
+  color: var(--paragraphs);
+  white-space: nowrap;
+}
+
+.continueBtn {
+  background: var(--button-bg);
+  color: var(--heading);
+  border: none;
+  border-radius: 50em;
+  padding: 1.4em 2.4em;
+  cursor: pointer;
+  transition:
+    background-color 0.3s var(--ease-out-quad),
+    opacity 0.3s var(--ease-out-quad);
+}
+
+.continueBtn:hover:not(:disabled) {
+  background: var(--button-bg-hover);
+}
+
+.continueBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* ---------- contact step (étape 8) ---------- */
+
+.contactForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.6em 2em;
+  max-width: 43em;
+  margin-top: 2.8em;
+}
+
+.field {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+  padding-top: 1.6em;
+  transition: border-color 0.3s var(--ease-out-quad);
+}
+
+.field[data-invalid="true"] {
+  border-bottom-color: #ff6b6b;
+}
+
+.input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--heading);
+  font-family: var(--font-oak);
+  font-size: 1.25em;
+  line-height: 1.4;
+  padding: 0.25em 0 0.5em;
+}
+
+.input:focus,
+.input:focus-visible {
+  outline: none; /* the sweeping white line is the focus indicator */
+}
+
+/* floating micro-label (after the input in the DOM → `~`) */
+.fieldLabel {
+  position: absolute;
+  left: 0;
+  bottom: 1em;
+  color: var(--paragraphs);
+  pointer-events: none;
+  transition:
+    transform 0.3s var(--ease-out-quad),
+    color 0.3s var(--ease-out-quad);
+}
+
+.input:focus ~ .fieldLabel,
+.input:not(:placeholder-shown) ~ .fieldLabel {
+  transform: translateY(-2.6em);
+}
+
+.input:focus ~ .fieldLabel {
+  color: var(--heading);
+}
+
+/* focus: white bottom line sweeps left → right, 0.4s (§1.3) */
+.fieldLine {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: var(--heading);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.4s var(--ease-out-quad);
+}
+
+.field:focus-within .fieldLine {
+  transform: scaleX(1);
+}
+
+/* inline errors: .8em red, fade/slide in 0.25s (§1.3) */
+.fieldError {
+  color: #ff6b6b;
+  font-size: 0.8em;
+  line-height: 1.5em;
+  margin: 0.6em 0 0;
+  animation: errorIn 0.25s var(--ease-out-quad) both;
+}
+
+@keyframes errorIn {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* créneau pills */
+.creneau {
+  grid-column: 1 / -1;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
+.creneauLegend {
+  color: var(--paragraphs);
+  padding: 0;
+  margin-bottom: 1.1em;
+}
+
+.creneauPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6em;
+}
+
+.creneauPill {
+  min-height: 48px;
+  color: var(--heading);
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 50em;
+  padding: 0.9em 1.5em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    border-color 0.3s var(--ease-out-quad),
+    background-color 0.3s var(--ease-out-quad);
+}
+
+.creneauPill:hover {
+  border-color: var(--paragraphs);
+}
+
+.creneauPillSelected {
+  border-color: var(--heading);
+  background: var(--glass-active);
+}
+
+/* RGPD */
+.rgpdBlock {
+  grid-column: 1 / -1;
+}
+
+.rgpd {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9em;
+  cursor: pointer;
+}
+
+.rgpdInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  opacity: 0;
+}
+
+.rgpdBox {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  margin-top: 0.3em;
+  border: 1px solid var(--border);
+  color: var(--heading);
+  display: grid;
+  place-items: center;
+  transition: border-color 0.3s var(--ease-out-quad);
+}
+
+.rgpdBox svg {
+  opacity: 0;
+  transform: scale(0.5);
+  transition:
+    opacity 0.25s var(--ease-out-quad),
+    transform 0.25s var(--ease-out-quad);
+}
+
+.rgpd:hover .rgpdBox {
+  border-color: var(--paragraphs);
+}
+
+.rgpdInput:checked + .rgpdBox {
+  border-color: var(--heading);
+}
+
+.rgpdInput:checked + .rgpdBox svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.rgpdInput:focus-visible + .rgpdBox {
+  outline: 2px solid var(--heading);
+  outline-offset: 4px;
+}
+
+.rgpdText {
+  font-size: 0.85em;
+  line-height: 1.7em;
+  color: var(--paragraphs);
+}
+
+.rgpdLink {
+  color: inherit;
+  text-decoration: underline;
+  transition: color 0.3s var(--ease-out-quad);
+}
+
+.rgpdLink:hover {
+  color: var(--heading);
+}
+
+/* submit */
+.submitRow {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.2em;
+  margin-top: 0.4em;
+}
+
+.banner {
+  width: 100%;
+  color: #ff6b6b;
+  font-size: 0.9em;
+  line-height: 1.6em;
+  border: 1px solid #ff6b6b4d;
+  border-radius: 0.6em;
+  padding: 0.9em 1.2em;
+  animation: errorIn 0.25s var(--ease-out-quad) both;
+}
+
+.submitBtn {
+  background: var(--heading);
+  color: var(--background);
+  border: none;
+  border-radius: 50em;
+  padding: 1.6em 2.8em;
+  cursor: pointer;
+  transition:
+    background-color 0.3s var(--ease-out-quad),
+    color 0.3s var(--ease-out-quad),
+    transform 0.3s var(--ease-out-quad);
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: var(--button-bg-hover);
+  color: var(--heading);
+  transform: translateY(-0.15em);
+}
+
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: progress;
+}
+
+/* ---------- success screen (§1.4) ---------- */
+
+.success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.successTitle {
+  font-family: var(--font-octane);
+  font-size: clamp(3rem, 12vw, 13rem);
+  font-weight: 400;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--heading);
+  font-variation-settings: "wght" 10, "wdth" 100;
+  margin: 0;
+  outline: none;
+  animation: successIn 2.5s var(--ease-out-quart) both;
+}
+
+@keyframes successIn {
+  from {
+    font-variation-settings: "wght" 10, "wdth" 0;
+  }
+  to {
+    font-variation-settings: "wght" 10, "wdth" 100;
+  }
+}
+
+.successSub {
+  color: var(--heading);
+  font-size: 1.1em;
+  margin: 1.4em 0 0;
+}
+
+.successBody {
+  color: var(--paragraphs);
+  font-size: 1em;
+  line-height: 1.7em;
+  max-width: 32em;
+  margin: 1em auto 2.6em;
+}
+
+.footerWrap {
+  animation: footerIn 0.8s var(--ease-out-quad) 0.3s both;
+}
+
+@keyframes footerIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---------- responsive ---------- */
+
+@media screen and (max-width: 991px) {
+  .cols3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .viewport {
+    padding: 7em 1.4em 3.5em;
+  }
+  .options,
+  .cols3 {
+    grid-template-columns: 1fr;
+    margin-top: 2.2em;
+  }
+  .contactForm {
+    grid-template-columns: 1fr;
+    gap: 2.4em;
+  }
+  .counter {
+    display: none; /* counter is desktop-only (§1.2) */
+  }
+  .actions {
+    margin-top: 2.6em;
+  }
+  .submitBtn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ---------- reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .title,
+  .successTitle,
+  .fieldError,
+  .banner,
+  .footerWrap {
+    animation: none;
+  }
+  .option,
+  .pill,
+  .optionLabel,
+  .optionKey,
+  .creneauPill,
+  .fieldLine,
+  .fieldLabel,
+  .backLine,
+  .submitBtn,
+  .continueBtn,
+  .rgpdBox,
+  .rgpdBox svg {
+    transition-duration: 0.01s;
+  }
+  .option:hover,
+  .pill:hover,
+  .submitBtn:hover:not(:disabled) {
+    transform: none;
+  }
+}

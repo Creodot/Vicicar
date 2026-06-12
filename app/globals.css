@@ -1,0 +1,225 @@
+/* ============================================================
+   VICICAR — globals
+   Source of truth: _reference/spec/design-system.md (from webflow.css)
+   ============================================================ */
+
+/* ---------- Fonts ----------
+   Manual @font-face (NOT next/font/local): Octane is a variable font with
+   the non-standard `font-weight: 0 100` range AND a custom `wdth` 0–100 axis
+   driven via font-variation-settings; next/font's hashed family names and
+   metric overrides get in the way of the literal `Octane, sans-serif` /
+   `Oak Sans, sans-serif` stacks and the dual-axis animation. Files are
+   preloaded from app/layout.tsx. */
+
+@font-face {
+  font-family: "Oak Sans";
+  src: url("/fonts/OakSans-ItalicVF.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Oak Sans";
+  src: url("/fonts/OakSansVF.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Octane";
+  src: url("/fonts/OctaneGX.ttf") format("truetype");
+  font-weight: 0 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Tokens ---------- */
+
+:root {
+  /* the 6 source custom props (webflow.css :root) */
+  --background: black;
+  --paragraphs: #ffffff80;
+  --heading: white;
+  --border: #fff3;
+  --midnight-blue: #272c5d;
+  --azure: #d9e9e9;
+
+  /* literals from source, tokenized (design-system.md §1.2) */
+  --glass: #70707033;
+  --glass-active: #70707066;
+  --button-bg: #7d7d7d33;
+  --button-bg-hover: #7d7d7d66;
+  --scrim: #0000004d;
+  --radial-glow: #1d1d1d;
+  --splash-bg: #ffffff1a;
+  --splash-bg-hover: #ffffff26;
+  --azure-50: #d9e9e980;
+
+  /* easings (design-system.md §1.3) */
+  --ease-out-quart: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* font stacks */
+  --font-octane: Octane, sans-serif;
+  --font-oak: "Oak Sans", sans-serif;
+}
+
+/* ---------- Base ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--paragraphs);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: stretch;
+  min-height: 100svh;
+  font-family: var(--font-oak);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.7em;
+  margin: 0;
+}
+
+/* ---------- Headings (color: --heading, "wght" 550) ---------- */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--heading);
+  font-variation-settings: "wght" 550;
+  font-weight: 600;
+  margin: 0;
+}
+
+h1 { font-size: 3.5em;  line-height: 1.1em; }
+h2 { font-size: 2.87em; line-height: 1.15em; }
+h3 { font-size: 2.37em; line-height: 1.16em; }
+h4 { font-size: 1.87em; line-height: 1.2em; }
+h5 { font-size: 1.37em; line-height: 1.23em; }
+h6 { font-size: 1.12em; line-height: 1.28em; }
+
+/* ---------- Text elements ---------- */
+
+p {
+  color: var(--paragraphs);
+  font-size: 1.1em;
+  line-height: 1.7em;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+ul, ol {
+  margin: 1.3em 0;
+  padding-left: 2.2em;
+  font-size: 1.1em;
+  line-height: 1.7em;
+}
+
+li {
+  padding: 0.2em 0.5em;
+}
+
+strong {
+  color: var(--heading);
+  font-weight: 600;
+}
+
+em {
+  font-style: italic;
+}
+
+blockquote {
+  border-left: 1px solid var(--border);
+  color: var(--heading);
+  margin: 1.3em 0 1.3em 0.9em;
+  padding-left: 1.3em;
+  font-size: 1.37em;
+  font-style: italic;
+  line-height: 1.7em;
+}
+
+figure {
+  margin: 2.7em 0;
+}
+
+figcaption {
+  text-align: center;
+  margin-top: 0.8em;
+  padding: 0 7%;
+  font-size: 1em;
+  line-height: 1.5em;
+}
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+  display: inline-block;
+  border: 0;
+}
+
+button {
+  font: inherit;
+}
+
+/* ---------- The site's signature micro-label (design-system.md §2.3) ---------- */
+
+.label {
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--heading);
+}
+
+/* ---------- Forms base ---------- */
+
+::placeholder {
+  color: var(--paragraphs);
+}
+
+/* ---------- A11y (additive, invisible to mouse users) ---------- */
+
+:focus-visible {
+  outline: 2px solid var(--heading);
+  outline-offset: 4px;
+}
+
+/* ---------- Responsive base (Webflow breakpoints) ---------- */
+
+@media screen and (max-width: 991px) {
+  h1 { font-size: 3.1em; }
+  h2 { font-size: 2.5em; }
+  h3 { font-size: 2em; }
+  h4 { font-size: 1.5em; }
+  h5 { font-size: 1.3em; }
+}
+
+@media screen and (max-width: 767px) {
+  body { font-size: 15px; }
+  h1 { font-size: 2.6em; }
+  h2 { font-size: 2.1em; }
+  h3 { font-size: 1.7em; }
+  h4 { font-size: 1.4em; }
+  h5 { font-size: 1.2em; }
+  h6 { font-size: 1em; }
+}
+
+@media screen and (max-width: 479px) {
+  h1 { font-size: 2.2em; }
+  h2 { font-size: 1.8em; }
+  h3 { font-size: 1.5em; }
+  h4 { font-size: 1.3em; }
+  h5 { font-size: 1.1em; }
+}
