@@ -63,25 +63,15 @@
 }
 
 .title {
-  font-family: var(--font-octane);
-  font-size: clamp(2.5rem, 8vw, 7rem);
-  font-weight: 400;
-  line-height: 0.95;
-  text-transform: uppercase;
+  /* simpler typography than the display heroes: Oak Sans, no variable-font
+     stretch animation (GSAP screen transition handles the entrance) */
+  font-family: var(--font-oak);
+  font-size: clamp(1.9rem, 4.5vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1.15;
   color: var(--heading);
-  font-variation-settings: "wght" 10, "wdth" 25;
-  margin: 0 0 0.35em;
+  margin: 0 0 0.5em;
   outline: none;
-  animation: titleIn 0.9s var(--ease-out-quart) both;
-}
-
-@keyframes titleIn {
-  from {
-    font-variation-settings: "wght" 10, "wdth" 0;
-  }
-  to {
-    font-variation-settings: "wght" 10, "wdth" 25;
-  }
 }
 
 .helper {
@@ -165,22 +155,13 @@
 }
 
 .optionLabel {
-  font-family: var(--font-octane);
-  font-size: clamp(1.4rem, 3.2vw, 2.6rem);
-  line-height: 1.05;
-  text-transform: uppercase;
-  font-variation-settings: "wght" 10, "wdth" 0;
-  transition: font-variation-settings 0.8s var(--ease-out-quart);
-}
-
-.option:hover .optionLabel,
-.pill:hover .optionLabel {
-  font-variation-settings: "wght" 10, "wdth" 40;
-}
-
-.option.optionSelected .optionLabel,
-.pill.optionSelected .optionLabel {
-  font-variation-settings: "wght" 10, "wdth" 100;
+  /* simple static type — no variable-font stretch, no hover effect on the
+     text itself (the card keeps its border/lift hover) */
+  font-family: var(--font-oak);
+  font-size: clamp(1.05rem, 1.8vw, 1.4rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: 0.02em;
 }
 
 .optionSub {
@@ -580,25 +561,13 @@
 }
 
 .successTitle {
-  font-family: var(--font-octane);
-  font-size: clamp(3rem, 12vw, 13rem);
-  font-weight: 400;
-  line-height: 1;
-  text-transform: uppercase;
+  font-family: var(--font-oak);
+  font-size: clamp(2.2rem, 6vw, 5rem);
+  font-weight: 600;
+  line-height: 1.1;
   color: var(--heading);
-  font-variation-settings: "wght" 10, "wdth" 100;
   margin: 0;
   outline: none;
-  animation: successIn 2.5s var(--ease-out-quart) both;
-}
-
-@keyframes successIn {
-  from {
-    font-variation-settings: "wght" 10, "wdth" 0;
-  }
-  to {
-    font-variation-settings: "wght" 10, "wdth" 100;
-  }
 }
 
 .successSub {
