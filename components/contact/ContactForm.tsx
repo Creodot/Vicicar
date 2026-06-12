@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { gsap, useGSAP, wfEase } from "@/lib/gsap";
 import styles from "./Contact.module.css";
+import { asset } from "@/lib/asset";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
@@ -92,7 +93,7 @@ export default function ContactForm() {
 
     setSending(true);
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(asset("/api/contact"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nom, email, message }),

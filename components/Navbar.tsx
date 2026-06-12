@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRef, useState } from "react";
 import { gsap, useGSAP, wfEase } from "@/lib/gsap";
 import NavLink from "./NavLink";
+import { asset } from "@/lib/asset";
 import styles from "./Navbar.module.css";
 
 /**
@@ -83,7 +84,7 @@ export default function Navbar() {
         onClick={onLinkClick}
       >
         <img
-          src="/logo-mobile.svg"
+          src={asset("/logo-mobile.svg")}
           alt="Vicicar"
           className={styles.logoMobile}
         />
@@ -106,7 +107,7 @@ export default function Navbar() {
             aria-label="Vicicar — Accueil"
             onClick={onLinkClick}
           >
-            <img src="/logo.svg" alt="Vicicar" className={styles.logo} />
+            <img src={asset("/logo.svg")} alt="Vicicar" className={styles.logo} />
           </Link>
 
           <div className={`${styles.nav} ${styles.navRight}`}>

@@ -4,34 +4,12 @@
    ============================================================ */
 
 /* ---------- Fonts ----------
-   Manual @font-face (NOT next/font/local): Octane is a variable font with
-   the non-standard `font-weight: 0 100` range AND a custom `wdth` 0–100 axis
-   driven via font-variation-settings; next/font's hashed family names and
-   metric overrides get in the way of the literal `Octane, sans-serif` /
-   `Oak Sans, sans-serif` stacks and the dual-axis animation. Files are
-   preloaded from app/layout.tsx. */
-
-@font-face {
-  font-family: "Oak Sans";
-  src: url("/fonts/OakSans-ItalicVF.woff2") format("woff2");
-  font-weight: 300 900;
-  font-style: italic;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Oak Sans";
-  src: url("/fonts/OakSansVF.woff2") format("woff2");
-  font-weight: 300 900;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Octane";
-  src: url("/fonts/OctaneGX.ttf") format("truetype");
-  font-weight: 0 100;
-  font-style: normal;
-  font-display: swap;
-}
+   @font-face declarations live in app/layout.tsx (inline <style>) so the
+   font URLs can carry the deployment base path (GitHub Pages serves under
+   /Vicicar). Manual @font-face (NOT next/font/local): Octane is a variable
+   font with the non-standard `font-weight: 0 100` range AND a custom `wdth`
+   0–100 axis driven via font-variation-settings; next/font's hashed family
+   names and metric overrides get in the way. Preloaded from layout.tsx. */
 
 /* ---------- Tokens ---------- */
 

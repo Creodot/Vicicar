@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CRENEAU_OPTIONS, type ChoiceKey } from "./formData";
 import { MSG, validateContactField } from "./validation";
 import s from "./MultiStepForm.module.css";
+import { asset } from "@/lib/asset";
 
 export type ContactValues = {
   prenom: string;
@@ -78,7 +79,7 @@ export default function ContactStep({ answers, values, onChange, onSuccess }: Pr
 
     setStatus("sending");
     try {
-      const res = await fetch("/api/leads", {
+      const res = await fetch(asset("/api/leads"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

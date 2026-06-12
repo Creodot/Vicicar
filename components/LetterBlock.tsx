@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { gsap, useGSAP, outQuad } from "@/lib/gsap";
+import { asset } from "@/lib/asset";
 import styles from "./Hero.module.css";
 
 type LetterBlockProps = {
@@ -79,10 +80,10 @@ export default function LetterBlock({ glyph, video }: LetterBlockProps) {
           playsInline
           preload="metadata"
           tabIndex={-1}
-          style={{ backgroundImage: `url(/videos/${video}-poster.jpg)` }}
+          style={{ backgroundImage: `url(${asset(`/videos/${video}-poster.jpg`)})` }}
         >
-          <source src={`/videos/${video}.mp4`} type="video/mp4" />
-          <source src={`/videos/${video}.webm`} type="video/webm" />
+          <source src={asset(`/videos/${video}.mp4`)} type="video/mp4" />
+          <source src={asset(`/videos/${video}.webm`)} type="video/webm" />
         </video>
       </div>
     </div>

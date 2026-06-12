@@ -1,5 +1,6 @@
 import Link from "next/link";
 import NavLink from "./NavLink";
+import { asset } from "@/lib/asset";
 import styles from "./Footer.module.css";
 
 /**
@@ -11,7 +12,7 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.row}>
         <Link href="/" className={styles.brand} aria-label="Vicicar — Accueil">
-          <img src="/logo.svg" alt="Vicicar" className={styles.logo} />
+          <img src={asset("/logo.svg")} alt="Vicicar" className={styles.logo} />
         </Link>
         <nav className={styles.links} aria-label="Pied de page">
           <NavLink href="/trouver-ma-voiture" label="Trouver ma voiture" />
