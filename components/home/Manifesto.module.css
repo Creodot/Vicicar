@@ -1,0 +1,100 @@
+/* S1 — Manifesto « 01 — LE SERVICE » (landing-v2.md §4)
+   Transparent background: the « Faisceau » canvas / gradient sits behind.
+   Static CSS = final visible state (--wdth defaults to 100). */
+
+.manifesto {
+  position: relative;
+  /* Scope the per-frame reflow of the --wdth variable-font scrub to this
+     section instead of the whole document. */
+  contain: layout style;
+  /* Safety net: a too-long credit line must never re-introduce page-wide
+     horizontal scroll (mobile-a11y). */
+  overflow-x: clip;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(5rem, 12vh, 7rem) clamp(1.5rem, 5vw, 4rem)
+    clamp(2.6rem, 6vh, 4rem);
+}
+
+.chapter {
+  margin: 0;
+}
+
+/* The three film-credit lines, block centered vertically. */
+.lines {
+  margin: auto 0;
+  font-size: 1em; /* sizing carried by .line */
+  line-height: 0.98;
+}
+
+.line {
+  display: block;
+  font-family: var(--font-octane);
+  /* --wdth tweened 0→100 by GSAP; defaults to the final state so
+     reduced-motion / no-JS render the full statement. */
+  font-variation-settings: "wght" 550, "wdth" var(--wdth, 100);
+  font-weight: 600;
+  /* Sized so the longest line (« VOUS DÉCRIVEZ. », ≈ 9.12px wide per px of
+     font-size at wdth 100) fits the gutters at every viewport; nowrap so
+     the lines never reflow to two rows mid-scrub. */
+  font-size: clamp(3rem, 9.5vw, 9.5rem);
+  line-height: 0.98;
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: var(--heading);
+}
+
+/* Ragged like film credits (desktop/tablet only). */
+@media (min-width: 768px) {
+  .line:nth-child(2) {
+    margin-left: 4vw;
+  }
+  .line:nth-child(3) {
+    margin-left: 1.5vw;
+  }
+}
+
+/* Bottom row: body bottom-right, link bottom-left (row-reverse — body is
+   first in DOM so mobile flows body → link). */
+.bottom {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2.6em;
+}
+
+.body {
+  max-width: 34ch;
+  margin: 0;
+}
+
+/* Cancel NavLink's inner padding so the link text sits on the gutter. */
+.link {
+  margin-left: -1.2em;
+}
+
+@media screen and (max-width: 767px) {
+  .manifesto {
+    padding-bottom: 2.6rem;
+  }
+
+  /* Lines in the top half, no indents. */
+  .lines {
+    margin: 2.6rem 0 0;
+  }
+
+  .line {
+    /* Plain 9.5vw (no 3rem floor — it would overflow below ~505px): the
+       longest line fits the 390px content box at wdth 100. */
+    font-size: 9.5vw;
+  }
+
+  .bottom {
+    margin-top: auto;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.3em;
+  }
+}

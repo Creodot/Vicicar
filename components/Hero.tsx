@@ -89,7 +89,7 @@ export default function Hero() {
   );
 
   return (
-    <main ref={sectionRef} className={styles.sectionHero}>
+    <section ref={sectionRef} className={styles.sectionHero}>
       <div
         className={styles.wrapperLetter}
         role="heading"
@@ -106,6 +106,6 @@ export default function Hero() {
           Laissez-Nous Trouver Votre Voiture Idéale
         </div>
       </div>
-    </main>
+    </section>
   );
 }

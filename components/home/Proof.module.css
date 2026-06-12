@@ -1,0 +1,150 @@
+/* S3 — « 03 — LA PREUVE » (landing-v2.md §6) — the breath between pins.
+   Transparent background: the sticky canvas (dimmed to 0.35 by the master
+   trigger) + gradient base layer sit behind. */
+
+.proof {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-inline: clamp(1.5rem, 5vw, 4rem);
+  padding-block: clamp(8rem, 18vh, 11rem) 5.2em;
+}
+
+.chapter {
+  position: absolute;
+  top: clamp(5rem, 12vh, 7rem);
+  left: clamp(1.5rem, 5vw, 4rem);
+  margin: 0;
+  /* Rendered as h2 (a11y outline) — cancel the global heading
+     "wght" 550 so the label visual is unchanged. */
+  font-variation-settings: normal;
+}
+
+.inner {
+  width: 100%;
+}
+
+/* ---------- Stats row: 3 equal cells, 1px vertical separators ---------- */
+
+.stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.3em;
+  padding: 2.6em 1.5rem;
+  text-align: center;
+}
+
+.cell + .cell {
+  border-left: 1px solid var(--border);
+}
+
+.figure {
+  font-family: var(--font-octane);
+  font-variation-settings: "wght" 550, "wdth" 100;
+  font-size: clamp(4rem, 8.5vw, 9rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border);
+  /* Count-up rewrites textContent; reserve enough box that digits ticking
+     over never reflow the row (CLS 0). */
+  min-width: 4ch;
+  font-variant-numeric: tabular-nums;
+  /* « 100 % » must never drop its % onto a second line in the mobile
+     ledger row (the format string also uses a no-break space). */
+  white-space: nowrap;
+}
+
+.caption {
+  color: var(--heading);
+}
+
+/* ---------- Pull-quote ---------- */
+
+.quote {
+  margin: 4em auto 0;
+  max-width: 56ch;
+  font-family: var(--font-oak);
+  font-style: italic;
+  font-size: clamp(1.4em, 2.6vw, 2.1em);
+  line-height: 1.45;
+  color: var(--heading);
+  text-align: center;
+}
+
+.meta {
+  display: block;
+  /* Padded hit area (≥ 44px tap target) without changing the visual
+     rhythm: 0.9em padding eaten back by negative margins. */
+  margin-block: calc(2.6em - 0.9em) -0.9em;
+  padding-block: 0.9em;
+  text-align: center;
+  text-decoration: none;
+  transition: color 0.3s var(--ease-out-quad);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .meta:hover {
+    color: var(--azure);
+  }
+}
+
+/* ---------- Mobile: stacked ledger rows, not a shrunken grid ---------- */
+
+@media screen and (max-width: 767px) {
+  .proof {
+    min-height: 110svh;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+    border-top: 1px solid var(--border);
+  }
+
+  .cell {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.3em 0;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cell + .cell {
+    border-left: none;
+  }
+
+  .figure {
+    /* 18vw: figure + right-aligned caption always share one ledger row
+       at 390px (22vw forced « 100 % » onto two lines). */
+    font-size: 18vw;
+    min-width: auto;
+  }
+
+  .caption {
+    text-align: right;
+  }
+
+  .quote {
+    margin-top: 3.9em;
+    margin-inline: 0;
+    font-size: 1.3em;
+    text-align: left;
+  }
+
+  .meta {
+    text-align: left;
+  }
+}
