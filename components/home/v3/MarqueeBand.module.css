@@ -1,0 +1,89 @@
+/* MarqueeBand — typographic breath (landing-v3.md §2.2)
+   Static CSS = final state: rules drawn, type visible. The sweeps hide /
+   reveal only inside the no-preference GSAP branch; marquee motion is
+   owned by the shared Marquee component. */
+
+.band {
+  position: relative;
+  overflow-x: clip;
+  padding-block: clamp(3.5rem, 9vh, 6.5rem);
+  background: var(--background);
+}
+
+.rule {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+/* --- Giant Octane strip --- */
+
+.giant {
+  font-family: var(--font-octane);
+  font-variation-settings: "wght" 550, "wdth" 100;
+  font-weight: 600;
+  font-size: clamp(6rem, 12vw, 12rem);
+  line-height: 0.85;
+  text-transform: uppercase;
+  color: var(--heading);
+  padding-block: clamp(1.25rem, 3vh, 2rem) clamp(1.5rem, 3.5vh, 2.4rem);
+  user-select: none;
+}
+
+/* Reduced-motion replacement rendered inside the Marquee (≥768). */
+.giantFallback {
+  display: block;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Mobile replacement (≤767) — the giant marquee is gone entirely. */
+.giantStatic {
+  display: none;
+  margin: 0;
+  font-family: var(--font-octane);
+  font-variation-settings: "wght" 550, "wdth" 100;
+  font-weight: 600;
+  /* « VOITURE. » (the wrapped second line) ≈7.9em at wdth 100 must fit
+     100vw: 11vw → 278px at 320, 339px at 390, 416px at 479. */
+  font-size: clamp(2.2rem, 11vw, 5.5rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--heading);
+  padding-block: clamp(1.25rem, 3vh, 2rem) clamp(1.5rem, 3.5vh, 2.4rem);
+}
+
+/* --- Mono label strip --- */
+
+.strip {
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--paragraphs);
+  padding-block: 1rem;
+  user-select: none;
+}
+
+/* Reduced-motion replacement for the strip: centered, wrapping, no
+   dangling separator or edge-clipped frozen track. */
+.stripFallback {
+  display: block;
+  text-align: center;
+  white-space: normal;
+  padding-inline: clamp(1.25rem, 4vw, 4rem);
+}
+
+/* --- Mobile (≤767): static giant, animated strip --- */
+
+@media (max-width: 767px) {
+  .giant {
+    display: none;
+  }
+
+  .giantStatic {
+    display: block;
+  }
+}

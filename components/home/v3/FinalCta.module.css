@@ -1,0 +1,286 @@
+/* 04 — À VOUS (landing-v3.md §2.5) — the headlights payoff.
+   Layered stage: z0 blurred I halo → z0.5 noise → z1 sharp I strip →
+   z2 bottom gradient → z3 content. Static CSS = final / no-JS /
+   reduced-motion state (word at wdth 100, posters, button functional). */
+
+.cta {
+  position: relative;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--background);
+  /* Scope the wdth variable-font reflow to this section. */
+  contain: layout style;
+}
+
+/* Section seam (LineSweep .rule gets position from this class) */
+.seam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 5;
+}
+
+/* ---------- z0 — blurred full-bleed halo (desktop only) ---------- */
+
+.halo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.haloVideo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* Deep grade: the I loop has bright white-studio frames — at .6 they
+     washed the side thirds milky. .42 + saturate keeps the red glow. */
+  filter: blur(2.5rem) brightness(0.42) saturate(1.25);
+  transform: scale(1.2); /* hide the blur's edge bleed */
+}
+
+/* Radial vignette over the halo (below the sharp strip): pins the page's
+   black register at the edges even on the loop's brightest frames. */
+.halo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    transparent,
+    #000c
+  );
+  pointer-events: none;
+}
+
+/* ---------- z0.5 — tiled noise to de-band the blur ---------- */
+
+.noise {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+/* ---------- z1 — sharp I strip (full-height portrait) ---------- */
+
+.panel {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.panelVideo {
+  height: 100%;
+  aspect-ratio: 9 / 16;
+  object-fit: cover;
+  filter: brightness(0.85);
+}
+
+/* ---------- z2 — clean seam into the Footer ---------- */
+
+.bottomFade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 26svh;
+  z-index: 3;
+  background: linear-gradient(to bottom, #0000, var(--background));
+  pointer-events: none;
+}
+
+/* ---------- z3 — content ---------- */
+
+.chapter {
+  position: absolute;
+  top: clamp(5rem, 12vh, 7rem);
+  left: clamp(1.25rem, 4vw, 4rem); /* the editorial spine inset */
+  z-index: 4;
+  margin: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 4;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-inline: clamp(1.25rem, 4vw, 4rem);
+}
+
+/* Mask for the word's rise — tiny padding so glyph edges never clip. */
+.wordMask {
+  overflow: clip;
+  padding-block: 0.06em;
+}
+
+.word {
+  margin: 0;
+  font-family: var(--font-octane);
+  /* 12vw (not 13) — safety slack so the wdth-100 glyphs never touch the
+     inset edges on any desktop width. */
+  font-size: clamp(4rem, 12vw, 11rem);
+  line-height: 0.9;
+  /* Never break at the hyphen (« ALLEZ- / Y. »). */
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: var(--heading);
+  /* Resting/static state = stretched (no-JS / reduced-motion truth). */
+  font-variation-settings: "wght" 550, "wdth" 100;
+  will-change: transform;
+}
+
+/* JS-armed (no-preference branch only): condensed + the hero's own
+   interruptible 3 s CSS stretch mechanism. */
+.wordAnim {
+  font-variation-settings: "wght" 550, "wdth" 0;
+  transition: font-variation-settings 3s var(--ease-out-quart);
+}
+
+.wordStretch {
+  font-variation-settings: "wght" 550, "wdth" 100;
+}
+
+/* ---------- Glass pill button ---------- */
+
+.button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2.6em;
+  min-height: 48px;
+  overflow: hidden;
+  background: var(--glass);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid var(--border);
+  border-radius: 1em;
+  text-decoration: none;
+  transition: border-radius 0.3s var(--ease-out-quad),
+    background-color 0.3s var(--ease-out-quad);
+}
+
+/* C3 bokeh living-glass layer — hover-driven (loads on first enter). */
+.buttonVideo {
+  position: absolute;
+  inset: -25%;
+  width: 150%;
+  height: 150%;
+  object-fit: cover;
+  filter: blur(2.5rem);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.buttonText {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  padding: 1.2em 3em;
+  color: var(--heading);
+  font-size: 0.8em;
+  font-weight: 500;
+  line-height: 1.2em;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+/* NavLink underline grammar (wipe-through, GSAP-driven) */
+.blockUnderline {
+  display: block;
+  width: 100%;
+  height: 1px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 0.35em;
+}
+
+.underline {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  background-color: var(--heading);
+  transform: translateX(-105%); /* FOUC-proof resting state */
+}
+
+.sub {
+  margin: 1.3em 0 0;
+  max-width: 38ch;
+  font-family: var(--font-oak);
+  /* Full white + soft shadow: this is the conversion microcopy under the
+     only CTA — 50% white over the bright studio floor was illegible. */
+  color: var(--heading);
+  text-shadow: 0 1px 24px #000c;
+}
+
+/* ---------- Hover (fine pointers only — never gated content) ---------- */
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    border-radius: 1.5em;
+    background-color: var(--glass-active);
+  }
+}
+
+/* The hover layer never exists for touch, small screens or reduced motion. */
+@media (hover: none), (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .buttonVideo {
+    display: none;
+  }
+}
+
+/* Reduced motion: the halo is pure decoration — drop it, keep the sharp
+   poster frame (headlights are visible in I-poster.jpg). */
+@media (prefers-reduced-motion: reduce) {
+  .halo,
+  .noise {
+    display: none;
+  }
+}
+
+/* ---------- ≤767 — the sharp I loop IS full-bleed native cover ---------- */
+
+@media screen and (max-width: 767px) {
+  /* display:none → IO never fires → halo never fetched/decoded. */
+  .halo,
+  .noise {
+    display: none;
+  }
+
+  .panel {
+    display: block;
+  }
+
+  .panelVideo {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  .word {
+    /* « ALLEZ-Y. » at wdth 100 measures ≈7.32em — 11.5vw keeps it inside
+       100vw − 2×inset at every width (320: 269px ≤ 280px box; 390: 328px
+       ≤ 350px; 767: 646px ≤ 706px). */
+    font-size: clamp(2.2rem, 11.5vw, 5.8rem);
+  }
+
+  .button {
+    width: min(100%, 22rem);
+    min-height: 56px;
+  }
+
+  .sub {
+    font-size: 0.95em;
+  }
+}

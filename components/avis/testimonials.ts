@@ -7,7 +7,7 @@ export type Testimonial = {
 
 /* Copy exact — content-ux.md §2.3. Single source of truth: rendered by
    components/avis/TestimonialList.tsx and quoted on the home page
-   (components/home/Proof.tsx via HOME_PULL_QUOTE below). */
+   (components/home/v3/Preuve.tsx via HOME_PULL_QUOTE below). */
 export const TESTIMONIALS: Testimonial[] = [
   {
     name: "Sophie M.",

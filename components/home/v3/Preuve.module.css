@@ -1,0 +1,251 @@
+/* 03 — LA PREUVE (landing-v3.md §2.4) — the quiet editorial scene.
+   Static CSS = final / no-JS / reduced-motion state: mask fully revealed,
+   figures at full value, chip visible. Choreography lives in the JS
+   no-preference branch only. */
+
+.preuve {
+  position: relative;
+  min-height: min(100dvh, 64rem);
+  display: flex;
+  flex-direction: column;
+  padding: clamp(5rem, 12vh, 7rem) clamp(1.25rem, 4vw, 4rem)
+    clamp(4rem, 10vh, 6rem);
+  background: var(--background);
+}
+
+/* Section seam (LineSweep .rule gets position from this class) */
+.seam {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* ---------- Chapter label (the editorial spine) ---------- */
+
+.chapter {
+  margin: 0 0 clamp(2.5rem, 6vh, 4rem);
+  /* h2 for the a11y outline — cancel the global heading "wght" 550 so the
+     .label visual is unchanged. */
+  font-variation-settings: normal;
+}
+
+/* ---------- Two columns: R panel left, ledger right ---------- */
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: clamp(3rem, 7vw, 7rem);
+  align-items: center;
+}
+
+/* ---------- R panel — sharp portrait, corner mask-wipe ---------- */
+
+.panelWrap {
+  position: relative;
+  height: 64vh;
+  aspect-ratio: 9 / 16;
+  border: 1px solid var(--border);
+  /* Corner mask from left-bottom. Static = revealed (101%); GSAP wipes
+     0% → 101% inside the no-preference branch. */
+  -webkit-mask-image: linear-gradient(#000, #000);
+  mask-image: linear-gradient(#000, #000);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: left bottom;
+  mask-position: left bottom;
+  -webkit-mask-size: 101% 101%;
+  mask-size: 101% 101%;
+}
+
+.panelVideo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.82);
+}
+
+/* ---------- Ledger rows ---------- */
+
+.right {
+  /* No cap: the ledger hairlines and right-aligned captions must run to
+     the page's editorial right inset (the .quote carries its own 30em). */
+  max-width: none;
+}
+
+.stats {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  margin: 0;
+}
+
+.rowInner {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  padding-block: 1.1em;
+}
+
+.figure {
+  font-family: var(--font-octane);
+  font-variation-settings: "wght" 550, "wdth" 100;
+  font-size: clamp(2.8rem, 6vw, 5.5rem);
+  line-height: 1;
+  color: var(--heading);
+  white-space: nowrap;
+  /* No tabular-nums: the figures never count up anymore, and full-width
+     figure spacing made « 100 % » read like a kerning bug. */
+}
+
+.caption {
+  color: var(--heading);
+  text-align: right;
+}
+
+/* ---------- Pull-quote ---------- */
+
+.quote {
+  /* Cancel the global blockquote dressing (border-left / inset margins). */
+  margin: clamp(2.5rem, 6vh, 4rem) 0 0;
+  padding: 0;
+  border: 0;
+  max-width: 30em;
+  font-family: var(--font-oak);
+  font-style: italic;
+  font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+  line-height: 1.45;
+  color: var(--heading);
+}
+
+/* ---------- Meta chip (glass, → /avis) ---------- */
+
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-top: clamp(2rem, 5vh, 3rem);
+  min-height: 48px;
+  overflow: hidden;
+  background: var(--glass);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid var(--border);
+  border-radius: 1em;
+  text-decoration: none;
+  transition: border-radius 0.3s var(--ease-out-quad);
+}
+
+/* C3 bokeh — the living-glass light source. Hover-driven (preload="none",
+   loads on first mouseenter). Resting = invisible; GSAP fades autoAlpha. */
+.chipVideo {
+  position: absolute;
+  inset: -25%;
+  width: 150%;
+  height: 150%;
+  object-fit: cover;
+  filter: blur(2.5rem);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.chipText {
+  position: relative;
+  z-index: 1;
+  padding: 1.1em 1.6em;
+  color: var(--heading);
+}
+
+.chipLink {
+  display: inline-block;
+}
+
+/* NavLink underline grammar (wipe-through, GSAP-driven) */
+.blockUnderline {
+  display: block;
+  width: 100%;
+  height: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.underline {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  background-color: var(--heading);
+  transform: translateX(-105%); /* FOUC-proof resting state */
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .chip:hover {
+    border-radius: 1.5em;
+  }
+}
+
+/* The hover layer never exists for touch, small screens or reduced motion
+   (no hover-gated content; chip is a plain tappable glass link). */
+@media (hover: none), (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .chipVideo {
+    display: none;
+  }
+}
+
+/* ---------- ≤991 — layout split: stacked, panel stays portrait ---------- */
+
+@media screen and (max-width: 991px) {
+  .preuve {
+    min-height: auto;
+    padding-block: clamp(4rem, 12svh, 6rem);
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    row-gap: clamp(2.5rem, 7vw, 4rem);
+    align-items: start;
+  }
+
+  .panelWrap {
+    height: 60vh;
+    margin-inline: auto;
+  }
+}
+
+/* ---------- ≤767 — native full-bleed cover panel, ledger rhythm ---------- */
+
+@media screen and (max-width: 767px) {
+  .panelWrap {
+    width: 100%;
+    height: 48svh;
+    aspect-ratio: auto;
+    margin-inline: 0;
+  }
+
+  .quote {
+    max-width: none;
+  }
+
+  .chip {
+    width: 100%;
+  }
+}
+
+/* ---------- ≤479 — type floor ---------- */
+
+@media screen and (max-width: 479px) {
+  .figure {
+    font-size: 2.4rem;
+  }
+
+  .chipText {
+    padding-inline: 1.2em;
+  }
+}

@@ -50,19 +50,35 @@ export default function NavLink({ href, label, className, onClick }: NavLinkProp
     });
   });
 
-  return (
-    <Link
-      ref={root}
-      href={href}
-      className={className ? `${styles.navLink} ${className}` : styles.navLink}
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-      onClick={onClick}
-    >
+  const sharedProps = {
+    ref: root,
+    className: className ? `${styles.navLink} ${className}` : styles.navLink,
+    onMouseEnter: onEnter,
+    onMouseLeave: onLeave,
+    onClick,
+  };
+
+  const inner = (
+    <>
       <span className={styles.navText}>{label}</span>
       <span className={styles.blockUnderline} aria-hidden="true">
         <span ref={line} className={styles.underline} />
       </span>
+    </>
+  );
+
+  /* Same-page hash links render a plain <a>: next/link's client handler
+     calls preventDefault + does its own router-driven instant hash jump,
+     which defeats the delegated Lenis smooth-scroll handler in
+     SmoothScroll.tsx. A plain anchor lets that handler intercept (or falls
+     back to the native jump when Lenis isn't mounted / reduced motion). */
+  return href.startsWith("#") ? (
+    <a href={href} {...sharedProps}>
+      {inner}
+    </a>
+  ) : (
+    <Link href={href} {...sharedProps}>
+      {inner}
     </Link>
   );
 }

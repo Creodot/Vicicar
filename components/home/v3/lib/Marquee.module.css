@@ -1,0 +1,54 @@
+.marquee {
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-scroll var(--marquee-duration, 24s) linear infinite;
+}
+
+.track[data-direction="right"] {
+  animation-direction: reverse;
+}
+
+.track[data-paused="true"] {
+  animation-play-state: paused;
+}
+
+.copy {
+  display: block;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.fallback {
+  display: none;
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Reduced motion: no movement; if a static fallback exists it replaces
+   the track entirely (spec §2.2 / §3.5). */
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+
+  .marquee[data-has-fallback="true"] .track {
+    display: none;
+  }
+
+  .marquee[data-has-fallback="true"] .fallback {
+    display: block;
+  }
+}

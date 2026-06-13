@@ -1,0 +1,20 @@
+/* Mask/line pair created by splitLines() — block-level so the wrapped
+   line keeps its natural box (no layout shift on split). */
+.mask {
+  display: block;
+  overflow: clip;
+}
+
+.line {
+  display: block;
+  will-change: transform;
+}
+
+/* Hairline rule for <LineSweep>. Static state = fully drawn (no-JS /
+   reduced-motion truth); the sweep animates scaleX from 0 only inside
+   the no-preference GSAP branch. */
+.rule {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}

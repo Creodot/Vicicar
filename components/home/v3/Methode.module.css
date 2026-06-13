@@ -1,0 +1,320 @@
+/* 02 — Méthode « step machine » (landing-v3.md §2.3)
+   DEFAULT CSS = stacked vertical blocks (mobile + reduced-motion + no-JS
+   truth): per-step hairline, azure micro, title, body, full-width loop,
+   digit watermark. The sticky cinema layout (panel cols 7–12, overlapping
+   text steps, giant right-bleed digits, progress rail) exists ONLY under
+   (min-width: 992px) and (prefers-reduced-motion: no-preference), gated
+   on [data-cinema] set by Methode.tsx's desktop branch. */
+
+.methode {
+  position: relative;
+  overflow-x: clip;
+  --inset: clamp(1.25rem, 4vw, 4rem);
+}
+
+/* Section seam — sweeps scaleX 0→1 (origin right) on first reveal. */
+.seam {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+.stage {
+  position: relative;
+  padding: clamp(4rem, 12svh, 6rem) var(--inset);
+}
+
+.chapter {
+  margin: 0 0 clamp(2.5rem, 6svh, 4rem);
+  /* Rendered as h2 (a11y outline) — cancel the global heading wght. */
+  font-variation-settings: normal;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+}
+
+/* --- Stacked steps (default truth) --- */
+
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 1em;
+  line-height: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(3.5rem, 9svh, 5.5rem);
+}
+
+.step {
+  position: relative;
+  padding-top: clamp(1.5rem, 4svh, 2.5rem);
+}
+
+.stepRule {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+}
+
+/* Mobile digit watermark — stroke-only, right-bleed, behind the title. */
+.stepDigit {
+  position: absolute;
+  top: clamp(0.5rem, 2svh, 1.5rem);
+  right: -0.18em;
+  z-index: 0;
+  font-family: var(--font-octane);
+  font-variation-settings: "wght" 550;
+  font-weight: 600;
+  font-size: 7rem;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border);
+  pointer-events: none;
+  user-select: none;
+}
+
+.text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1em;
+  max-width: 34em;
+}
+
+.tMask {
+  display: block;
+  overflow: clip;
+}
+
+.tMask > * {
+  will-change: transform;
+}
+
+.micro {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  color: var(--azure);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-octane);
+  font-variation-settings: "wght" 550, "wdth" 100;
+  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.05;
+}
+
+.body {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+  max-width: 34em;
+}
+
+/* Stacked media slot — native portrait, full-width cover, revealed by a
+   corner mask-wipe (mask grows from a bottom corner; alternating side).
+   The var fallback (101%) keeps it fully visible for no-JS / reduced
+   motion; the animated branch sets --msz to 0% before the wipe. */
+.stepMedia {
+  position: relative;
+  width: 100%;
+  height: 56svh;
+  margin-top: clamp(1.5rem, 4svh, 2.5rem);
+  -webkit-mask-image: linear-gradient(#000, #000);
+  mask-image: linear-gradient(#000, #000);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: var(--msz, 101%) var(--msz, 101%);
+  mask-size: var(--msz, 101%) var(--msz, 101%);
+}
+
+.stepMedia[data-alt="left"] {
+  -webkit-mask-position: left bottom;
+  mask-position: left bottom;
+}
+
+.stepMedia[data-alt="right"] {
+  -webkit-mask-position: right bottom;
+  mask-position: right bottom;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.8);
+}
+
+/* Desktop-only apparatus — hidden in the stacked truth. */
+.panel,
+.digits,
+.rail {
+  display: none;
+}
+
+/* ============================================================
+   Desktop cinema layout — JS-gated ([data-cinema]) + media query
+   safety net. CSS sticky pins the stage; the machine swaps via
+   clip-path / transform only.
+   ============================================================ */
+
+@media (min-width: 992px) and (prefers-reduced-motion: no-preference) {
+  .methode[data-cinema] {
+    height: 280vh;
+  }
+
+  .methode[data-cinema] .stage {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    column-gap: clamp(1rem, 2vw, 2rem);
+    align-items: center;
+    padding: clamp(2.5rem, 6vh, 4rem) var(--inset);
+    overflow: clip;
+  }
+
+  .methode[data-cinema] .chapter {
+    position: absolute;
+    /* Match the other chapters' spine offset — clears the fixed navbar. */
+    top: clamp(5rem, 12vh, 7rem);
+    left: var(--inset);
+    margin: 0;
+    z-index: 4;
+  }
+
+  /* Text column (cols 1–5): steps overlap in one cell; inactive ones are
+     hidden inside the masks (yPercent 110 — set by JS only). */
+  .methode[data-cinema] .steps {
+    grid-column: 1 / 6;
+    grid-row: 1;
+    display: grid;
+    gap: 0;
+    z-index: 2;
+  }
+
+  .methode[data-cinema] .step {
+    grid-area: 1 / 1;
+    padding-top: 0;
+    padding-left: clamp(2rem, 3vw, 3rem); /* clear the rail */
+    align-self: center;
+  }
+
+  .methode[data-cinema] .stepRule,
+  .methode[data-cinema] .stepDigit,
+  .methode[data-cinema] .stepMedia {
+    display: none;
+  }
+
+  /* Active-step micro flips to azure — the only color in the scene. */
+  .methode[data-cinema] .micro {
+    color: var(--heading);
+    transition: color 0.3s var(--ease-out-quad);
+  }
+
+  .methode[data-cinema] .step[data-active] .micro {
+    color: var(--azure);
+  }
+
+  /* Media panel (cols 7–12): 9:16, 80vh, right-anchored, hairline frame. */
+  .methode[data-cinema] .panel {
+    display: block;
+    position: relative;
+    grid-column: 7 / 13;
+    grid-row: 1;
+    justify-self: end;
+    align-self: center;
+    height: min(80vh, 56rem);
+    aspect-ratio: 9 / 16;
+    overflow: clip;
+    z-index: 1;
+  }
+
+  .methode[data-cinema] .panelMedia {
+    position: absolute;
+    inset: 0;
+    will-change: clip-path;
+  }
+
+  .methode[data-cinema] .panelFrame {
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--border);
+    pointer-events: none;
+    z-index: 3;
+  }
+
+  /* Giant outlined digit — anchored to the viewport's right edge,
+     bleeding off it, layered OVER the moving paint. */
+  .methode[data-cinema] .digits {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: -0.18em;
+    z-index: 3;
+    font-size: clamp(12rem, 20vw, 20rem);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .methode[data-cinema] .digit {
+    position: absolute;
+    top: -0.5em;
+    right: 0;
+    font-family: var(--font-octane);
+    font-variation-settings: "wght" 550;
+    font-weight: 600;
+    font-size: inherit;
+    line-height: 1;
+    /* Whisper of fill + 35% stroke: the watermark must read on the
+       near-black I2/A2 footage (the --border hairline token vanished). */
+    color: #ffffff08;
+    -webkit-text-stroke: 1.5px #ffffff59;
+    white-space: nowrap;
+    will-change: transform, opacity;
+  }
+
+  /* Progress rail — 2px, left of the text column, scaleY scrubbed 0→1. */
+  .methode[data-cinema] .rail {
+    display: block;
+    position: absolute;
+    /* Start below the chapter label so the line never touches its glyphs. */
+    top: calc(clamp(5rem, 12vh, 7rem) + 2.25rem);
+    bottom: clamp(2.5rem, 6vh, 4rem);
+    left: var(--inset);
+    width: 2px;
+    background: var(--border);
+    z-index: 2;
+  }
+
+  .methode[data-cinema] .railFill {
+    position: absolute;
+    inset: 0;
+    background: var(--heading);
+    transform: scaleY(0); /* 2D only — GSAP fromTo mirrors this explicitly */
+    transform-origin: top center;
+  }
+}
+
+/* --- Small phones --- */
+
+@media (max-width: 479px) {
+  .stepDigit {
+    font-size: 5.5rem;
+  }
+
+  .stepMedia {
+    height: 52svh;
+  }
+}

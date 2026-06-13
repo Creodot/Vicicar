@@ -1,0 +1,218 @@
+/* 01 — Manifeste « LE SERVICE » (landing-v3.md §2.1)
+   DEFAULT CSS = mobile + reduced-motion + no-JS truth: auto-height section,
+   V full-bleed cover behind, lines at wdth 100, everything visible.
+   The sticky/swell layout exists ONLY under (min-width: 992px) and
+   (prefers-reduced-motion: no-preference), gated on [data-cinema]
+   (set by Manifeste.tsx's desktop branch). */
+
+.manifeste {
+  position: relative;
+  /* Scope the per-frame --wdth relayout to this section. */
+  contain: layout style;
+  --inset: clamp(1.25rem, 4vw, 4rem);
+}
+
+.stage {
+  position: relative;
+  overflow: clip;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(5rem, 12vh, 7rem) var(--inset) clamp(2.6rem, 6vh, 4rem);
+  background: var(--background);
+}
+
+/* --- Media: V loop --- */
+
+/* Default = mobile: native 9:16 full-bleed cover behind everything. */
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: brightness(0.7);
+}
+
+/* Hairline frame — desktop panel only. */
+.frame {
+  display: none;
+}
+
+/* Bottom seam into the next section (mobile full-bleed only). */
+.seamGradient {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 28%;
+  z-index: 0;
+  background: linear-gradient(transparent, var(--background));
+  pointer-events: none;
+}
+
+/* --- Type layers (over the video) --- */
+
+.chapter {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+}
+
+/* Tricolon: 3 left-aligned lines, block centered vertically, left edge at
+   the global inset — composited OVER and WIDER than the panel. */
+.lines {
+  position: relative;
+  z-index: 1;
+  margin: auto 0;
+  font-size: 1em; /* sizing carried by .line */
+  line-height: 0.9;
+}
+
+.mask {
+  display: block;
+  overflow: clip;
+}
+
+.line {
+  display: block;
+  font-family: var(--font-octane);
+  /* --wdth animated by GSAP (desktop scrub) or the CSS transition below
+     (mobile); defaults to the final state for no-JS / reduced motion. */
+  font-variation-settings: "wght" 550, "wdth" var(--wdth, 100);
+  font-weight: 600;
+  /* Sized for the wdth-100 END state (the static / reduced-motion truth):
+     « VOUS DÉCRIVEZ. » at wdth 100 must fit the inset content box —
+     6vw ≈ 1240px of glyphs at 1440 (box 1325), 7rem cap ≈ 1607 at 1920
+     (box 1792). */
+  font-size: clamp(2.6rem, 6vw, 7rem);
+  line-height: 0.9;
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: var(--heading);
+  will-change: transform;
+}
+
+/* Mobile stretch: interruptible CSS transition (class toggled by JS after
+   the masked rise — the hero's own mechanism). */
+.stretch {
+  transition: font-variation-settings 3s var(--ease-out-quart);
+}
+
+/* --- Bottom row: body + link --- */
+
+.bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2.6em;
+}
+
+.body {
+  max-width: 34em;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+@media (min-width: 992px) {
+  .body {
+    max-width: 34ch;
+  }
+}
+
+/* Cancel NavLink's inner padding so the link sits on the gutter. */
+.linkMask {
+  overflow: clip;
+  margin-left: -1.2em;
+}
+
+.linkInner {
+  display: flex;
+  align-items: center;
+  /* 44px tap-target floor (NavLink's own padding yields 42px at 16px
+     base; the mask's overflow:clip still hides the rise fully). */
+  min-height: 44px;
+  will-change: transform;
+}
+
+/* ============================================================
+   Desktop cinema layout — JS-gated ([data-cinema]) + media query
+   safety net. CSS sticky does the pinning; GSAP only scrubs
+   transform / opacity / --wdth.
+   ============================================================ */
+
+@media (min-width: 992px) and (prefers-reduced-motion: no-preference) {
+  .manifeste[data-cinema] {
+    height: min(160vh, 100rem);
+    height: min(160dvh, 100rem);
+  }
+
+  .manifeste[data-cinema] .stage {
+    position: sticky;
+    top: 0;
+    min-height: 0;
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  /* Sharp portrait panel at near-native scale, centered (inset+margin
+     auto — transform stays free for the GSAP swell scale). */
+  .manifeste[data-cinema] .media {
+    inset: 0;
+    margin: auto;
+    height: 100vh;
+    height: 100dvh;
+    aspect-ratio: 9 / 16;
+    width: auto;
+    will-change: transform;
+  }
+
+  .manifeste[data-cinema] .video {
+    filter: brightness(0.78);
+  }
+
+  .manifeste[data-cinema] .frame {
+    display: block;
+    position: absolute;
+    inset: 0;
+    border: 1px solid var(--border);
+    pointer-events: none;
+  }
+
+  /* The full-bleed seam gradient is a mobile device — the desktop panel
+     never touches the section edge. */
+  .manifeste[data-cinema] .seamGradient {
+    display: none;
+  }
+}
+
+/* --- Mobile / small --- */
+
+@media (max-width: 767px) {
+  .stage {
+    padding-bottom: 2.6rem;
+  }
+
+  .line {
+    /* No rem floor: the longest line (« VOUS DÉCRIVEZ. », ≈14.4em at
+       wdth 100, nowrap) must fit the inset content box even at 320
+       viewport (6vw → 276px of glyphs in a 280px box). */
+    font-size: 6vw;
+  }
+
+  .bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.3em;
+  }
+}
